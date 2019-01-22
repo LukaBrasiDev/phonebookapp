@@ -27,8 +27,8 @@ public class ContactMapper implements Mapper<Contact, ContactDto> {
                 from.getName(),
                 from.getSurname(),
                 from.getNumber(),
-                from.getAddress().getCity(),
                 from.getCategory().getTitle(),
+                from.getAddress().getCity(),
                 from.getRanking().getNumber(),
                 tags );
     }

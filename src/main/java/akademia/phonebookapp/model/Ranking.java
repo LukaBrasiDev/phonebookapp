@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -30,5 +31,5 @@ public class Ranking {
             CascadeType.REFRESH //odświeżanie stanu encji
           //  CascadeType.REMOVE //usuwanie encji
     })
-    private Set<Contact> contacts;
+    private Set<Contact> contacts = new HashSet<>();
 }

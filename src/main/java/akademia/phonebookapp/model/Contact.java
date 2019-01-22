@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -41,7 +43,7 @@ public class Contact {
     private Category category;
 
     //Address
-    @OneToOne(fetch = FetchType.LAZY,cascade = {
+    @ManyToOne(cascade ={
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.DETACH,
@@ -71,7 +73,7 @@ public class Contact {
             joinColumns = @JoinColumn(name = "contact_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Tag> tags = new ArrayList<>(); //powinno byc SET
+    private Set<Tag> tags = new HashSet<>(); //powinno byc SET
 
 
 

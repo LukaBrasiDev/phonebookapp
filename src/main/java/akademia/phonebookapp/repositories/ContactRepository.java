@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 // @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
@@ -20,8 +21,11 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
     Contact findBySurname(String surname);
 
 
-    @Query(value = "delete from contacts where surname = ?1", nativeQuery = true)
-    void deleteContactBySurname(String surname); //todo nalezy poprawic query
+    @Query(value = "select * from contacts where number = ?1", nativeQuery = true)
+    Optional<Contact> findByPhoneNumber(String phone);
+
+
+
 
 }
 

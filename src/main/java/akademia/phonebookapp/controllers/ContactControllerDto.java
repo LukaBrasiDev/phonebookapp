@@ -5,6 +5,8 @@ import akademia.phonebookapp.dtos.mappers.ContactMapper;
 import akademia.phonebookapp.dtos.model.ContactDto;
 import akademia.phonebookapp.model.Contact;
 import akademia.phonebookapp.service.ContactService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,40 +18,49 @@ import java.util.List;
 public class ContactControllerDto {
 
     private ContactService contactService;
-    private ContactMapper mapper;
 
-    public ContactControllerDto(ContactService contactService, ContactMapper mapper) {
+
+    public ContactControllerDto(ContactService contactService) {
         this.contactService = contactService;
-        this.mapper = mapper;
+
     }
 
     @GetMapping("/contacts")
     public List<ContactDto> getAllContacts() {
 
-        List<Contact> contacts = contactService.getContacts(); //zwraca listę warstwy DAO
-        List<ContactDto> contactDtos = new ArrayList<>();
-
-        for (Contact c : contacts) {
-            contactDtos.add(mapper.map(c));
-        }
-        return contactDtos;
+        return contactService.getContactsDto();
     }
 
 
     @GetMapping("/contacts/{name}")
     public List<ContactDto> getAllContactsByName(@PathVariable String name) {
-        List<Contact> contacts = contactService.getContactsByName(name);
-        List<ContactDto> contactDtos = new ArrayList<>();
 
-        for (Contact c : contacts) {
-            contactDtos.add(mapper.map(c));
+        return contactService.getContactsDtoByName(name);
+    }
+
+    @DeleteMapping("/contacts")
+    public ResponseEntity<?> deleteContact(@RequestParam(name = "phone") String phone) {
+        if (contactService.deleteContactByPhone(phone)) {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return contactDtos;
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/contacts/{surname}")
-    public void deleteContact(@PathVariable String surname) {
-        contactService.deleteContact(surname);
+    @PostMapping("/contacts")
+    public void addNewContact(@RequestBody ContactDto contactDto) {
+        contactService.addNewContactDto(contactDto);
     }
+
+    @PutMapping("/contacts")
+    public ResponseEntity<String> updateContactAddress(
+            @RequestParam("phone") String phone,
+            @RequestParam("city") String city) {
+        if (contactService.updateAddressByPhone(phone, city)) {//true /fasle
+            return new ResponseEntity<>("Contact updated!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("ERROR: contact not found!", HttpStatus.NOT_FOUND);
+    }
+
+
 
 }

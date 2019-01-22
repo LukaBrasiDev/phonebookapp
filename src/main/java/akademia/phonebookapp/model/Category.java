@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -23,7 +24,14 @@ public class Category {
     private String title;
 
     @JsonIgnore //zapobiega zapętlaniu przy tworzeniu obiektu JSON
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private Set<Contact> contacts;
+    @OneToMany(mappedBy = "category",
+            fetch = FetchType.LAZY,
+            cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    })
+    private Set<Contact> contacts = new HashSet<>();
 
 }
