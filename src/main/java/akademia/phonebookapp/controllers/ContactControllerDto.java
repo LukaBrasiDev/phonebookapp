@@ -61,6 +61,12 @@ public class ContactControllerDto {
         return new ResponseEntity<>("ERROR: contact not found!", HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/contacts/tag")
+    public List<ContactDto> getContactsByTag(@RequestParam String title){
+        return contactService.getContactDtoByTag(title);
+    }
+
+
 
 
 }

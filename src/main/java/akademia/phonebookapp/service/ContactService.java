@@ -156,35 +156,7 @@ public class ContactService {
         return false;
     }
 
-    //dto
-/*    public boolean addTagsToContact(String phone, List<String> tagList) {
-        //szukam kontaktu w bazie danych na podstawie nr telefonu
-        Optional<Contact> contactOptional = contactRepository.findByPhoneNumber(phone);
-//jesli taki kontak istnieje
-        if (contactOptional.isPresent()) {
-
-            //iteruje po liscie tagow
-            for (String t : tagList) {
-
-                //przy kazdej iteracji petli spr czy tag istnieje w bazie
-                Optional<Tag> tagOptional = tagRepository.findByTitle(t);
-
-                //jesli tag nie istnieje w bazie to zapisuje go w bazie jako nowy tag
-                if (tagOptional.isPresent()) {
-                    contactOptional.get().getTags().add(tagRepository.save(new Tag(t)));
-                    //jesli podany tag istnieje w bazie to tylko dodaje go do kontaktu
-                } else {
-                    contactOptional.get().getTags().add(tagOptional.get());
-                }
-            }
-            //zapisuje zaktualizowany kontakt z powrotem do bazy danych
-            contactRepository.save(contactOptional.get());
-            return true;
-        }
-        return false;
-    }*/
-
-    //DTO
+   //DTO
     public boolean addTagsToContact(String phone, List<String> tagList) {
         //szukam kontaktu w bazie danych na podstawie nr telefonu
         Optional<Contact> contactOptional = contactRepository.findByPhoneNumber(phone);
@@ -211,5 +183,15 @@ public class ContactService {
         }
         return false;
     }
+//DTO
+    public List<ContactDto> getContactDtoByTag (String title){
+        List<ContactDto>contactDtos = new ArrayList<>();
+
+        for (Contact c: contactRepository.findContactsByTag(title)){
+contactDtos.add(contactMapper.map(c));
+        }
+        return contactDtos;
+    }
+
 
 }
